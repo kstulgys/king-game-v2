@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const AppContext = React.createContext({
   currentGame: null,
@@ -10,7 +10,7 @@ const AppContext = React.createContext({
   games: [
     {
       no: 1,
-      title: 'Tricks+',
+      title: "Tricks+",
       each: 12,
       totalPoints: 120,
       count: 10,
@@ -18,7 +18,7 @@ const AppContext = React.createContext({
     },
     {
       no: 2,
-      title: 'Tricks++',
+      title: "Tricks++",
       each: 12,
       totalPoints: 120,
       count: 10,
@@ -26,7 +26,7 @@ const AppContext = React.createContext({
     },
     {
       no: 3,
-      title: 'Tricks-',
+      title: "Tricks-",
       each: -4,
       totalPoints: -40,
       count: 10,
@@ -34,7 +34,7 @@ const AppContext = React.createContext({
     },
     {
       no: 4,
-      title: 'Hearts',
+      title: "Hearts",
       each: -5,
       totalPoints: -40,
       count: 8,
@@ -42,7 +42,7 @@ const AppContext = React.createContext({
     },
     {
       no: 5,
-      title: 'Queens',
+      title: "Queens",
       each: -10,
       totalPoints: -40,
       count: 4,
@@ -50,7 +50,7 @@ const AppContext = React.createContext({
     },
     {
       no: 6,
-      title: 'Jacks',
+      title: "Jacks",
       each: -10,
       totalPoints: -40,
       count: 4,
@@ -58,7 +58,7 @@ const AppContext = React.createContext({
     },
     {
       no: 7,
-      title: 'King',
+      title: "King",
       each: -40,
       totalPoints: -40,
       count: 1,
@@ -66,13 +66,13 @@ const AppContext = React.createContext({
     },
     {
       no: 8,
-      title: 'Last 2',
+      title: "Last 2",
       each: -20,
       totalPoints: -40,
       count: 2,
       currentPoints: 0
     }
   ]
-})
+});
 
-export default AppContext
+export default AppContext;

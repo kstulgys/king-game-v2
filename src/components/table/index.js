@@ -37,8 +37,8 @@ export default function KingTable() {
     });
   return (
     <>
-      <Header as="h1" content={state.currentGame.title} />
-      <Segment>
+      <Header as="h1" textAlign="center" content={state.currentGame.title} />
+      <Segment raised="very">
         <Table textAlign="center" basic="very">
           <Table.Header>
             <Table.Row>

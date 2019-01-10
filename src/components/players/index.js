@@ -137,7 +137,7 @@ function GameButton({ game, player }) {
       {game && game.result && (game.result[0] === 0 || game.result[0]) && (
         <div className="pb1">
           {game.result.map((r, i) => (
-            <span>
+            <span key={i}>
               {r}
               {(i === 0 || i === 1 || i === 2) && "|"}
             </span>
@@ -162,6 +162,7 @@ function PlayerRow({ player }) {
         >
           <div className="flex items-center justify-center">
             <Image
+              size="tiny"
               avatar
               src={`https://api.adorable.io/avatars/100/${player.name}.io.png`}
             />

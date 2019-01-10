@@ -1,86 +1,100 @@
-import React, { Component, Fragment, useContext, useState } from 'react'
-import { Icon, Label, Menu, Table, Dropdown, Button } from 'semantic-ui-react'
-import AppContext from '../../context'
+import React, { Component, Fragment, useContext, useState } from "react";
+import {
+  Icon,
+  Header,
+  Segment,
+  Table,
+  Dropdown,
+  Button
+} from "semantic-ui-react";
+import AppContext from "../../context";
 
 export default function KingTable() {
-	const { state, dispatch } = useContext(AppContext)
-	const initialState = Array(state.totalPlayers).fill(0)
-	// console.log(initialState)
-	const [gamePoints, setPoints] = useState(initialState)
-	const [namePoints, setNamePoints] = useState(initialState)
+  const { state, dispatch } = useContext(AppContext);
+  const initialState = Array(state.totalPlayers).fill(0);
+  // console.log(initialState)
+  const [gamePoints, setPoints] = useState(initialState);
+  const [namePoints, setNamePoints] = useState(initialState);
 
-	const handleResult = (player, result) => {
-		const playerName = player.name.split('')[0]
-		console.log(playerName)
+  const handleResult = (player, result) => {
+    // const playerName = player.name.split("")[0];
+    // console.log(playerName);
 
-		let res = [...gamePoints]
-		res[player.no - 1] = result
-		setPoints(res)
-	}
+    let res = [...gamePoints];
+    res[player.no - 1] = result;
+    setPoints(res);
+  };
 
-	const gameCurrentPoint = gamePoints.reduce((a, b) => a + b, 0)
+  const gameCurrentPoint = gamePoints.reduce((a, b) => a + b, 0);
 
-	const options = Array(state.currentGame.count + 1)
-		.fill()
-		.map((n, i) => {
-			return {
-				value: i,
-				text: i
-			}
-		})
-	return (
-		<Table definition textAlign="center" basic="very">
-			<Table.Header>
-				<Table.Row>
-					<Table.HeaderCell>Game</Table.HeaderCell>
-					<Table.HeaderCell>Each</Table.HeaderCell>
-					{state.players.map(player => (
-						<Table.HeaderCell key={player.no}>{player.name}</Table.HeaderCell>
-					))}
-					<Table.HeaderCell>Total</Table.HeaderCell>
-				</Table.Row>
-			</Table.Header>
+  const options = Array(state.currentGame.count + 1)
+    .fill()
+    .map((n, i) => {
+      return {
+        value: i,
+        text: i
+      };
+    });
+  return (
+    <>
+      <Header as="h1" content={state.currentGame.title} />
+      <Segment>
+        <Table textAlign="center" basic="very">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Each</Table.HeaderCell>
+              {state.players.map(player => (
+                <Table.HeaderCell key={player.no}>
+                  {player.name}
+                </Table.HeaderCell>
+              ))}
+              <Table.HeaderCell>Total</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
 
-			<Table.Body>
-				<Table.Row>
-					<Table.HeaderCell>{state.currentGame.title}</Table.HeaderCell>
-					<Table.Cell>{state.currentGame.each}</Table.Cell>
-					{state.players.map(player => (
-						<Table.Cell key={player.no} textAlign="center">
-							<p>{gamePoints[player.no - 1]}</p>
-							<Dropdown
-								compact
-								selection
-								defaultValue={0}
-								options={options}
-								onChange={(event, data) => {
-									handleResult(player, data.value * state.currentGame.each)
-								}}
-							/>
-						</Table.Cell>
-					))}
-					<Table.Cell>
-						{gameCurrentPoint}/{state.currentGame.totalPoints}
-						<div>
-							<Button
-								onClick={() => {
-									dispatch({
-										type: 'GAME_SUBMIT',
-										gamePoints
-									})
-									setPoints([])
-								}}
-								color="red"
-								disabled={gameCurrentPoint !== state.currentGame.totalPoints}
-							>
-								Finish
-							</Button>
-						</div>
-					</Table.Cell>
-				</Table.Row>
-			</Table.Body>
-		</Table>
-	)
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>{state.currentGame.each}</Table.Cell>
+              {state.players.map(player => (
+                <Table.Cell key={player.no} textAlign="center">
+                  <p>{gamePoints[player.no - 1]}</p>
+                  <Dropdown
+                    compact
+                    selection
+                    defaultValue={0}
+                    options={options}
+                    onChange={(event, data) => {
+                      handleResult(player, data.value * state.currentGame.each);
+                    }}
+                  />
+                </Table.Cell>
+              ))}
+              <Table.Cell>
+                {gameCurrentPoint}/{state.currentGame.totalPoints}
+                <div>
+                  <Button
+                    onClick={() => {
+                      dispatch({
+                        type: "GAME_SUBMIT",
+                        gamePoints
+                      });
+                      setPoints(initialState);
+                    }}
+                    color="red"
+                    disabled={
+                      gameCurrentPoint !== state.currentGame.totalPoints
+                    }
+                  >
+                    Finish
+                  </Button>
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </Segment>
+    </>
+  );
 }
 
 // const TableRow = ({ game }) => {

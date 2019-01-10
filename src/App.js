@@ -1,66 +1,67 @@
-import React, { Fragment, useContext, useReducer, useEffect } from 'react'
-import KingTable from './components/table'
-import Players from './components/players'
-import PlayersModal from './components/players-modal/index'
-import AppContext from './context'
-import appReducer from './reducer'
-import { Button, Container, Grid } from 'semantic-ui-react'
+import React, { Fragment, useContext, useReducer, useEffect } from "react";
+import KingTable from "./components/table";
+import Players from "./components/players";
+import PlayersModal from "./components/players-modal/index";
+import AppContext from "./context";
+import appReducer from "./reducer";
+import { Button, Container, Grid } from "semantic-ui-react";
 
 function App() {
-	const { state, dispatch } = useContext(AppContext)
+  const { state, dispatch } = useContext(AppContext);
+  console.log(state);
+  useEffect(() => {
+    // console.log('LOAD_FROM_LOCALSTORAGE')
+    // loadFromLocalStorage({ dispatch });
+    const serializedState = localStorage.getItem("state");
+    if (!serializedState) return;
+    const persistedState = JSON.parse(serializedState);
+    dispatch({ type: "LOAD_FROM_LOCALSTORAGE", persistedState });
+  }, []);
 
-	useEffect(() => {
-		// console.log('LOAD_FROM_LOCALSTORAGE')
-		// loadFromLocalStorage({ dispatch });
-		const serializedState = localStorage.getItem('state')
-		const persistedState = JSON.parse(serializedState)
-		dispatch({ type: 'LOAD_FROM_LOCALSTORAGE', persistedState })
-	}, [])
-
-	useEffect(
-		() => {
-			// console.log('SAVE_TO_LOCALSTORAGE')
-			// saveToLocalStorage(state);
-			const serializedState = JSON.stringify(state)
-			localStorage.setItem('state', serializedState)
-		},
-		[state]
-	)
-	// console.log(state)
-	return (
-		<Grid
-			container
-			// stretched
-			centered
-			// columns={2}
-			style={{ height: '100vh', width: '100vw', margin: 0 }}
-		>
-			<Grid.Column>
-				{state && state.players && state.players[0] ? (
-					<>
-						<Players />
-						{state.currentGame && <KingTable />}
-					</>
-				) : (
-					<PlayersModal />
-				)}
-			</Grid.Column>
-		</Grid>
-	)
+  useEffect(
+    () => {
+      // console.log('SAVE_TO_LOCALSTORAGE')
+      // saveToLocalStorage(state);
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem("state", serializedState);
+    },
+    [state]
+  );
+  // console.log(state)
+  return (
+    <Grid
+      container
+      // stretched
+      centered
+      // columns={2}
+      style={{ height: "100vh", width: "100vw", margin: 0 }}
+    >
+      <Grid.Column>
+        {state && state.players && state.players[0] ? (
+          <>
+            <Players />
+            {state.currentGame && <KingTable />}
+          </>
+        ) : (
+          <PlayersModal />
+        )}
+      </Grid.Column>
+    </Grid>
+  );
 }
 
 const Root = () => {
-	const initialState = useContext(AppContext)
-	const [state, dispatch] = useReducer(appReducer, initialState)
+  const initialState = useContext(AppContext);
+  const [state, dispatch] = useReducer(appReducer, initialState);
 
-	return (
-		<AppContext.Provider value={{ state, dispatch }}>
-			<App />
-		</AppContext.Provider>
-	)
-}
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      <App />
+    </AppContext.Provider>
+  );
+};
 
-export default Root
+export default Root;
 
 // const withUseEffect = () => {
 //   useEffect(() => {

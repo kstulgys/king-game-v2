@@ -9,76 +9,191 @@ import {
   List,
   Search,
   Icon,
-  Grid
+  Grid,
+  Label
 } from "semantic-ui-react";
 import AppContext from "../../context";
 
-const GameLabel = ({ game, player }) => {
+// const GameLabel = ({ game, player }) => {
+//   const { state, dispatch } = useContext(AppContext);
+//   // const disabled = player.no !== state.turn
+//   // const divider = game.result[0] ? 5 : 0
+//   return (
+//     <Button
+//       size="large"
+//       circular
+//       color={`${game.played ? "gray" : "red"}`}
+// onClick={
+//   state.finished && state.turn === player.no
+//     ? () => dispatch({ type: "SELECT_GAME", selectedGame: game, player })
+//     : null
+// }
+//     >
+//       <div>
+// {game.result &&
+//   game.result.map((r, i) => (
+//     <strong>
+//       {r}
+//       {(i === 0 || i === 1 || i === 2) && "|"}
+//     </strong>
+//   ))}
+//       </div>
+
+//       {game.title}
+//     </Button>
+//   );
+// };
+
+// const PlayerRow = ({ player }) => {
+//   const { state } = useContext(AppContext);
+
+//   return (
+//     <Table.Row warning={state.turn === player.no}>
+//       <Table.Cell textAlign="center">
+//         <Header as="h4" image>
+//           <div>
+//             <Header.Content>{player && player.name}</Header.Content>
+//           </div>
+//           <Image
+//             src={`https://api.adorable.io/avatars/285/${player &&
+//               player.name}.io.png`}
+//             rounded
+//             size="massive"
+//           />
+//         </Header>
+//       </Table.Cell>
+//       <Table.Cell>
+//         {player &&
+//           player.games &&
+//           player.games.map(game => (
+//             <GameLabel key={game.no} game={game} player={player} />
+//           ))}
+//       </Table.Cell>
+
+//       <Table.Cell textAlign="center">
+//         <Header content={player && player.totalScore} />
+//       </Table.Cell>
+//     </Table.Row>
+//   );
+// };
+
+// const PlayersTable = () => {
+//   const { state } = useContext(AppContext);
+
+//   return (
+//     <>
+// <Button
+//   fluid
+//   content="Reset Game"
+//   onClick={() => {
+//     const r = window.confirm(
+//       `Do you really want to reset this game? All data will be lost`
+//     );
+//     if (r == true) {
+//       localStorage.clear();
+//       window.location.reload();
+//     }
+//   }}
+// />
+//       <Segment loading={false} style={{ padding: 0 }} raised="very" color="red">
+//         <Header as="h3" block attached className="flex justify-between">
+//           <span> Players </span>
+//           <span> Games</span>
+//           <span> Score</span>
+//         </Header>
+
+//         <Table padded="very" basic>
+//           <Table.Body>
+// {state.players &&
+//   state.players.map(player => {
+//                 return <PlayerRow key={player && player.no} player={player} />;
+//               })}
+//           </Table.Body>
+//         </Table>
+//       </Segment>
+//     </>
+//   );
+// };
+
+// export default PlayersTable;
+
+function GameButton({ game, player }) {
   const { state, dispatch } = useContext(AppContext);
-  // const disabled = player.no !== state.turn
-  // const divider = game.result[0] ? 5 : 0
+
+  const disabled = player.no !== state.turn;
   return (
     <Button
-      size="large"
+      disabled={disabled}
       circular
-      color={`${game.played ? "gray" : "red"}`}
+      inverted={game.played ? false : true}
+      color="red"
+      style={{ marginTop: 5 }}
       onClick={
         state.finished && state.turn === player.no
           ? () => dispatch({ type: "SELECT_GAME", selectedGame: game, player })
           : null
       }
     >
-      <div>
-        {game.result &&
-          game.result.map((r, i) => (
-            <strong>
+      {game && game.result && (game.result[0] === 0 || game.result[0]) && (
+        <div className="pb1">
+          {game.result.map((r, i) => (
+            <span>
               {r}
               {(i === 0 || i === 1 || i === 2) && "|"}
-            </strong>
+            </span>
           ))}
-      </div>
-
+        </div>
+      )}
       {game.title}
     </Button>
   );
-};
+}
 
-const PlayerRow = ({ player }) => {
-  const { state } = useContext(AppContext);
-
+function PlayerRow({ player }) {
+  // const { state, dispatch } = useContext(AppContext);
   return (
-    <Table.Row warning={state.turn === player.no}>
-      <Table.Cell textAlign="center">
-        <Header as="h4" image>
-          <div>
-            <Header.Content>{player && player.name}</Header.Content>
+    <>
+      <Grid.Row>
+        <Grid.Column
+          width={3}
+          className="items-center justify-center"
+          style={{ display: "flex" }}
+          textAlign="center"
+        >
+          <div className="flex items-center justify-center">
+            <Image
+              avatar
+              src={`https://api.adorable.io/avatars/100/${player.name}.io.png`}
+            />
+            <p className="pl2">
+              <strong>{player.name} </strong>
+            </p>
           </div>
-          <Image
-            src={`https://api.adorable.io/avatars/285/${player &&
-              player.name}.io.png`}
-            rounded
-            size="massive"
-          />
-        </Header>
-      </Table.Cell>
-      <Table.Cell>
-        {player &&
-          player.games &&
-          player.games.map(game => (
-            <GameLabel key={game.no} game={game} player={player} />
+        </Grid.Column>
+        <Grid.Column width={11} textAlign="center">
+          {player.games.map(game => (
+            <GameButton key={game.no} game={game} player={player} />
           ))}
-      </Table.Cell>
-
-      <Table.Cell textAlign="center">
-        <Header content={player && player.totalScore} />
-      </Table.Cell>
-    </Table.Row>
+        </Grid.Column>
+        <Grid.Column
+          width={2}
+          style={{ display: "flex" }}
+          textAlign="center"
+          className="items-center justify-center"
+        >
+          <span>
+            <strong> {player.totalScore} </strong>
+          </span>
+        </Grid.Column>
+      </Grid.Row>
+      <br />
+      <br />
+    </>
   );
-};
+}
 
-const PlayersTable = () => {
-  const { state } = useContext(AppContext);
-
+function ListExampleFloated() {
+  const { state, dispatch } = useContext(AppContext);
   return (
     <>
       <Button
@@ -94,27 +209,24 @@ const PlayersTable = () => {
           }
         }}
       />
-      <Segment loading={false} style={{ padding: 0 }} raised="very" color="red">
-        <Header as="h3" block attached className="flex justify-between">
-          <span> Players </span>
-          <span> Games</span>
-          <span> Score</span>
-        </Header>
-
-        <Table padded="very" basic>
-          <Table.Body>
-            {state.players &&
-              state.players.map(player => {
-                return <PlayerRow key={player && player.no} player={player} />;
-              })}
-          </Table.Body>
-        </Table>
+      <Segment raised="very" padded>
+        <Grid columns={3}>
+          {state.players &&
+            state.players.map(player => (
+              <PlayerRow key={player.no} player={player} />
+            ))}
+        </Grid>
       </Segment>
     </>
   );
-};
+}
+export default ListExampleFloated;
 
-export default PlayersTable;
+// {Array(4)
+//   .fill(null)
+//   .map((item, i) => (
+//     <PlayerRow name={`name-${i}`} />
+//   ))}
 
 // const ListExampleVeryRelaxedHorizontal = () => (
 //   <>
@@ -216,3 +328,55 @@ export default PlayersTable;
 // );
 
 // export default ListExampleVeryRelaxedHorizontal;
+
+// const ListExampleFloated = () => (
+//   <Segment raised="very">
+//     <List verticalAlign="middle">
+//       <List.Item>
+//         <List.Content floated="right" style={{ paddingRight: 30 }}>
+//           66
+//         </List.Content>
+//         <Image
+//           verticalAlign="middle"
+//           floated="left"
+//           avatar
+//           src="https://react.semantic-ui.com/images/avatar/small/lena.png"
+//         />
+//         <List.Content floated="left">Lena2</List.Content>
+//         <List.Content floated="left">Lena</List.Content>
+//       </List.Item>
+//       <List.Item>
+//         <List.Content floated="right">
+//           <Button>Add</Button>
+//         </List.Content>
+// <Image
+//   avatar
+//   src="https://react.semantic-ui.com/images/avatar/small/lindsay.png"
+// />
+//         <List.Content>Lindsay</List.Content>
+//       </List.Item>
+//       <List.Item>
+//         <List.Content floated="right">
+//           <Button>Add</Button>
+//         </List.Content>
+//         <Image
+//           avatar
+//           src="https://react.semantic-ui.com/images/avatar/small/mark.png"
+//         />
+//         <List.Content>Mark</List.Content>
+//       </List.Item>
+//       <List.Item>
+//         <List.Content floated="right">
+//           <Button>Add</Button>
+//         </List.Content>
+//         <Image
+//           avatar
+//           src="https://react.semantic-ui.com/images/avatar/small/molly.png"
+//         />
+//         <List.Content>Molly</List.Content>
+//       </List.Item>
+//     </List>
+//   </Segment>
+// );
+
+// export default ListExampleFloated;
